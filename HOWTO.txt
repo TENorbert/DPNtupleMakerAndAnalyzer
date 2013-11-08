@@ -1,0 +1,36 @@
+# This is a simple HOWTO to use these package in CMSSW
+
+...First git clone
+git clone git://github.com/TENorbert/DPNtupleMakerAndAnalyzer.git
+
+....Second
+Create CMS style package format as required by scram b
+i.e create  Subpackage/DPAnalysis
+
+....Third
+In the DPAnalysis folder, crease following
+
+DPAnalysis/src
+DPAnalysis/interface
+DPAnalysis/python
+DPAnalysis/test
+
+....Fourth 
+Move all the .cc and .h files to the DPAnalysis/src  folder
+If you want to you can also move all the .py files to DPAnalysis/python
+
+Leave the .xml file in DPAnalysis/
+
+....Firth
+
+Now run scramb vclean  ofcourse after cmsenv and stuff like that
+
+Now Run scramb -j 8;
+
+.... Sixth
+If all goes on smoothly ... you can now run
+cmsRun pythonfilename.py
+
+to make ntuples of Do a crab job as I will explain later.
+
+
