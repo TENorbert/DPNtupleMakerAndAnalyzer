@@ -89,6 +89,28 @@ void setBranchAddresses(TTree* chain, Ntuple& treeVars)
   //chain -> SetBranchAddress("jecUncU",      treeVars.jecUncU  );
   //chain -> SetBranchAddress("jecUncD",      treeVars.jecUncD  );
   
+  chain -> SetBranchAddress("jseedtime1",      treeVars.jseedtime1  );
+  chain -> SetBranchAddress("jseedtime2",      treeVars.jseedtime2  );
+  chain -> SetBranchAddress("jseedChi2",       treeVars.jseedChi2  );
+  chain -> SetBranchAddress("jseedE",          treeVars.jseedE );
+  chain -> SetBranchAddress("jseedOOtChi2",    treeVars.jseedOOtChi2 );
+  chain -> SetBranchAddress("jseedBCtime",     treeVars.jseedBCtime );
+  chain -> SetBranchAddress("jseedtimeErr",    treeVars.jseedtimeErr );
+  chain -> SetBranchAddress("jWavetime",       treeVars.jWavetime );
+  chain -> SetBranchAddress("jWavetimeErr",    treeVars.jWavetimeErr );
+  chain -> SetBranchAddress("jfspike",         treeVars.jfspike  );
+  chain -> SetBranchAddress("jtChi2",          treeVars.jtChi2  );
+  chain -> SetBranchAddress("jnXtals",         treeVars.jnXtals  );
+  chain -> SetBranchAddress("jnBC",            treeVars.jnBC  );
+  chain -> SetBranchAddress("jnseedXtals",     treeVars.jnseedXtals  );
+  chain -> SetBranchAddress("jCandVx",         treeVars.jCandVx  );
+  chain -> SetBranchAddress("jCandVy",         treeVars.jCandVy  );
+  chain -> SetBranchAddress("jCandVz",         treeVars.jCandVz  );
+  chain -> SetBranchAddress("jCandEcalE",      treeVars.jCandEcalE  );
+  chain -> SetBranchAddress("jCandHcalE",      treeVars.jCandHcalE  );
+  chain -> SetBranchAddress("jCandHoE",        treeVars.jCandHoE  );
+  chain -> SetBranchAddress("jgammaE",         treeVars.jgammaE  );
+  
   chain -> SetBranchAddress("phoPx",        treeVars.phoPx     );
   chain -> SetBranchAddress("phoPy",        treeVars.phoPy     );
   chain -> SetBranchAddress("phoPz",        treeVars.phoPz     );
@@ -221,6 +243,27 @@ void setBranches(TTree* chain, Ntuple& treeVars)
   //chain -> Branch("jecUncU",      treeVars.jecUncU,               "jecUncU[nJets]/F" );
   //chain -> Branch("jecUncD",      treeVars.jecUncD,               "jecUncD[nJets]/F" );
   
+  chain -> Branch("jseedtime1",      treeVars.jseedtime1,               "jseedtime1[nJets]/F" );
+  chain -> Branch("jseedtime2",      treeVars.jseedtime2,               "jseedtime2[nJets]/F" );
+  chain -> Branch("jseedChi2",       treeVars.jseedChi2,               "jseedChi2[nJets]/F" );
+  chain -> Branch("jseedE",          treeVars.jseedE,               "jseedE[nJets]/F" );
+  chain -> Branch("jseedOOtChi2",    treeVars.jseedOOtChi2,               "jseedOOtChi2[nJets]/F" );
+  chain -> Branch("jseedBCtime",     treeVars.jseedBCtime,               "jseedBCtime[nJets]/F" );
+  chain -> Branch("jWavetime",       treeVars.jWavetime,               "jseedWave[nJets]/F" );
+  chain -> Branch("jWavetimeErr",    treeVars.jWavetimeErr,               "jWavetimeErr[nJets]/F" );
+  chain -> Branch("jfspike",         treeVars.jfspike,               "jfspike[nJets]/F" );
+  chain -> Branch("jtChi2",          treeVars.jtChi2,               "jtChi2[nJets]/F" );
+  chain -> Branch("jnXtals",         treeVars.jnXtals,               "jnXtals[nJets]/I" );
+  chain -> Branch("jnBC",            treeVars.jnBC,               "jnBC[nJets]/I" );
+  chain -> Branch("jnseedXtals",      treeVars.jnseedXtals,               "jnseedXtals[nJets]/I" );
+  chain -> Branch("jCandVx",          treeVars.jCandVx,               "jCandVx[nJets]/F" );
+  chain -> Branch("jCandVy",          treeVars.jCandVy,               "jCandVy[nJets]/F" );
+  chain -> Branch("jCandVz",          treeVars.jCandVz,               "jCandVz[nJets]/F" );
+  chain -> Branch("jCandEcalE",       treeVars.jCandEcalE,               "jCandEcalE[nJets]/F" );
+  chain -> Branch("jCandHcalE",       treeVars.jCandHcalE,               "jCandHcalE[nJets]/F" );
+  chain -> Branch("jCandHoE",        treeVars.jCandHoE,               "jCandHoE[nJets]/F" );
+  chain -> Branch("jgammaE",         treeVars.jgammaE,               "jgammaE[nJets]/F" );
+  
   chain -> Branch("phoPx",        treeVars.phoPx,                 "phoPx[nPhotons]/F");
   chain -> Branch("phoPy",        treeVars.phoPy,                 "phoPy[nPhotons]/F");
   chain -> Branch("phoPz",        treeVars.phoPz,                 "phoPz[nPhotons]/F");
@@ -341,6 +384,27 @@ void initializeBranches(TTree* chain, Ntuple& treeVars)
       treeVars.jecUnc[i] = 0 ;
       //treeVars.jecUncU[i] = 0 ;
       //treeVars.jecUncD[i] = 0 ;
+      treeVars.jseedtime1[i] = 0 ;
+      treeVars.jseedtime2[i] = 0 ;
+      treeVars.jseedChi2[i] = 0 ;
+      treeVars.jseedE[i] = 0 ;
+      treeVars.jseedOOtChi2[i] = 0 ;
+      treeVars.jseedBCtime[i] = 0 ;
+      treeVars.jseedtimeErr[i] = 0 ;
+      treeVars.jWavetime[i] = 0 ;
+      treeVars.jWavetimeErr[i] = 0 ;
+      treeVars.jfspike[i] = 0 ;
+      treeVars.jtChi2[i] = 0 ;
+      treeVars.jnXtals[i] = 99999 ;
+      treeVars.jnBC[i] = 999999 ;
+      treeVars.jnseedXtals[i] = 99999 ;
+      treeVars.jCandVx[i] = 0 ;
+      treeVars.jCandVy[i] = 0 ;
+      treeVars.jCandVz[i] = 0 ;
+      treeVars.jCandEcalE[i] = 0 ;
+      treeVars.jCandHcalE[i] = 0 ;
+      treeVars.jCandHoE[i] = 0 ;
+      treeVars.jgammaE[i] = 0 ;
   }
 
   for ( int i=0; i< MAXELE; i++) {
@@ -389,8 +453,8 @@ void initializeBranches(TTree* chain, Ntuple& treeVars)
       treeVars.fSpike[i]      = -1 ;
       treeVars.maxSwissX[i]   = 0 ;
       treeVars.seedSwissX[i]  = 0 ;
-      treeVars.nXtals[i]      = 0 ;
-      treeVars.nBC[i]         = 0 ;
+      treeVars.nXtals[i]      = 9999 ;
+      treeVars.nBC[i]         = 9999 ;
       treeVars.sigmaEta[i]    = -1. ;
       treeVars.sigmaIeta[i]   = -1. ;
       treeVars.cscRho[i]      = -1. ;

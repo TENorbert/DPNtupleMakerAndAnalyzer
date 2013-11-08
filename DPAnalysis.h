@@ -17,7 +17,8 @@
 //         Created:  Thu Sep 29 05:26:22 CDT 2011
 // 
 // Second  Author: Tambe E. Norbert
-//
+//        Added Extra functions Fri Nov 08 05:17 ET 2013
+// 
 // $Id$
 //
 //
@@ -128,6 +129,7 @@
 //#include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 //#include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbRecord.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalTools.h"
+#include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
 //#include "CalibCalorimetry/EcalTiming/interface/timeVsAmpliCorrector.h"
 
 // JEC uncerntainties
@@ -187,16 +189,20 @@ struct PhoInfo {
 
 struct JetInfo {
 
-double Jseedtime;
-double JseedtimeErr;
-double JWavetime;
-double JWavetimeErr
-double Jtchi2;
-double JmaxSX;
-double Jfspike
-int    Jnxtals;
-int     JnBC;
-int     JnseedXtal;
+double Jseedtime1 ;
+double Jseedtime2 ;
+double JseedChi2 ;
+double JseedEr ;
+double JseedOOtChi2 ;
+double JseedBCtime ;
+double JseedtimeErr ;
+double JWavetime ;
+double JWavetimeErr ;
+double Jtchi2 ;
+double Jfspike ;
+int    Jnxtals ;
+int     JnBC ;
+int     JnseedXtal ;
 };
 
 
@@ -294,9 +300,13 @@ class DPAnalysis : public edm::EDAnalyzer {
 
 
 //Jet selection with Timing Infor
-      bool JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const> reco::Photon*>& selectedPhotons);
+      bool JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
+      
+//bool JetSelectionWithTimingInfo(const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
 
       void JetClusterTime( reco::SuperClusterRef scRef, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, JetInfo& JetT, bool useAllClusters = false ) ;
+
+//void DPAnalysis::JetClusterTime( const edm::Event& iEvent, const edm::EventSetup& iSetup, reco::SuperClusterRef scRef, Handle<EcalRecHitCollection> recHitsEB, Handle<EcalRecHitCollection> recHitsEE, JetInfo& jetTmp, bool useAllClusters ) {
 
       bool ConversionVeto( const reco::Photon* thePhoton ) ;
       double RhoCorrection( int type , double eta ) ;

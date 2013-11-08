@@ -54,7 +54,30 @@ struct Ntuple
   float jerUnc[MAXJET];
   //float jecUncU[MAXJET];
   //float jecUncD[MAXJET];
+
+  float jseedtime1[MAXJET];
+  float jseedtime2[MAXJET];
+  float jseedChi2[MAXJET];
+  float jseedE[MAXJET];
+  float jseedOOtChi2[MAXJET];
+  float jseedBCtime[MAXJET];
+  float jseedtimeErr[MAXJET];
+  float jWavetime[MAXJET];
+  float jWavetimeErr[MAXJET];
+  float jfspike[MAXJET];
+  float jtChi2[MAXJET];
+  int jnXtals[MAXJET];
+  int jnBC[MAXJET];
+  int jnseedXtals[MAXJET];
+  float jCandVx[MAXJET];
+  float jCandVy[MAXJET];
+  float jCandVz[MAXJET];
+  float jCandEcalE[MAXJET];
+  float jCandHcalE[MAXJET];
+  float jCandHoE[MAXJET];
+  float jgammaE[MAXJET];
   
+
   float metPx;
   float metPy;
   float met;
