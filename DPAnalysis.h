@@ -299,7 +299,7 @@ class DPAnalysis : public edm::EDAnalyzer {
 
 
 //Jet selection with Timing Infor
-      bool JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons);
+      bool JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,  vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
       
 //bool JetSelectionWithTimingInfo(const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
 
@@ -382,8 +382,8 @@ class DPAnalysis : public edm::EDAnalyzer {
       std::vector<double> jetCuts ; 
       std::vector<double> vtxCuts ; 
 
-      //std::vector<const reco::PFJet*> selectedJets ;
-      std::vector<pat_Jet*> selectedJets ;
+      std::vector<const reco::PFJet*> selectedJets ;
+      std::vector<pat_Jet*> selectedJets_ ;
       std::vector<const reco::GsfElectron*> selectedElectrons ;
       std::vector<const reco::Muon*> selectedMuons ;
       std::vector<const reco::Photon*> selectedPhotons ;

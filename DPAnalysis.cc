@@ -342,13 +342,16 @@ bool DPAnalysis::EventSelection(const edm::Event& iEvent, const edm::EventSetup&
 
 
 
-   JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons );
-   selectedJets.clear() ;
-   //JetSelection( jets, selectedPhotons, selectedJets );
-   JetSelection( patjets, selectedPhotons, selectedJets ); 
+   selectedJets.clear() ; // if using PFJet
+   JetSelection( jets, selectedPhotons, selectedJets ) ; //if PFJ use
+  // selectedJets_.clear() ;  // if using pat_Jet
+  //JetSelection( patjets, selectedPhotons, selectedJets_ ) ; // if pat_Jet use 
+    // Is designed to use reco::PFJ 
+    JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons );
    //bool isGammaJets = GammaJetVeto( selectedPhotons, selectedJets ) ;
    //if ( isGammaJets ) passEvent = false ;
    if ( selectedJets.size() < jetCuts[3] )   passEvent = false ;
+   //if ( selectedJets_.size() < jetCuts[3] )   passEvent = false ;
    if ( passEvent )   counter[9]++ ;   
    
    //JERUncertainty( patjets ) ;
@@ -1429,13 +1432,13 @@ bool DPAnalysis::JetSelection( Handle< vector<pat::Jet> > patjets, vector<const 
        leaves.jerUnc[k]  = dPt ;
        k++ ;
    }
-   leaves.nJets = (int)( selectedJets.size() ) ;
+   leaves.nJets = (int)( selectedJets_.size() ) ;
    leaves.met_dx1    = met_dx  ;
    leaves.met_dy1    = met_dy  ;
    leaves.met_dx2    = met_sx  ;
    leaves.met_dy2    = met_sy  ;
 
-   if ( selectedJets.size() > 0 )  return true ; 
+   if ( selectedJets_.size() > 0 )  return true ; 
    else                            return false ;    
 
 }
@@ -1553,7 +1556,7 @@ void DPAnalysis::JERUncertainty( Handle< std::vector<pat::Jet> > patjets ) {
 }
 
 // Fxn for JetTiming
-bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
+bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
 //bool DPAnalysis::JetSelectionWithTimingInfo( iconst edm::Event& iEvent, const edm::EventSetup& iSetup, Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
@@ -1640,7 +1643,7 @@ bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets,
        vector<double> uncV = JECUncertainty( ijet->pt(), ijet->eta(), jecUnc ) ;
 
        if ( k >= MAXJET ) break ;
-      /// selectedJets.push_back( &(*ijet) ) ;  //cannot put PFJ into Pat_Jet container
+       selectedJets.push_back( &(*ijet) ) ;  //cannot put PFJ into Pat_Jet container
        leaves.jetPx[k] = ijet->p4().Px() ;
        leaves.jetPy[k] = ijet->p4().Py() ;
        leaves.jetPz[k] = ijet->p4().Pz() ;
