@@ -12,8 +12,7 @@
 //
 // Original Author:  Shih-Chuan Kao
 //         Created:  Sat Oct  8 06:50:16 CDT 2011
-// Second Author: Tambe E. Norbert
-//         Added Extra functions Fri Nov 08 05:17 ET 2013
+// Second Author: Tambe E. Norbert 
 //$Id$
 //
 //
@@ -341,9 +340,12 @@ bool DPAnalysis::EventSelection(const edm::Event& iEvent, const edm::EventSetup&
    //IsoPhotonSelection( selectedPhotons ) ;
    //if ( selectedPhotons.size() < photonCuts[5] )  passEvent = false ;
 
+
+
+   JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons );
    selectedJets.clear() ;
    //JetSelection( jets, selectedPhotons, selectedJets );
-   JetSelection( patjets, selectedPhotons, selectedJets );
+   JetSelection( patjets, selectedPhotons, selectedJets ); 
    //bool isGammaJets = GammaJetVeto( selectedPhotons, selectedJets ) ;
    //if ( isGammaJets ) passEvent = false ;
    if ( selectedJets.size() < jetCuts[3] )   passEvent = false ;
@@ -1551,7 +1553,7 @@ void DPAnalysis::JERUncertainty( Handle< std::vector<pat::Jet> > patjets ) {
 }
 
 // Fxn for JetTiming
-bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
+bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
 //bool DPAnalysis::JetSelectionWithTimingInfo( iconst edm::Event& iEvent, const edm::EventSetup& iSetup, Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
@@ -1638,7 +1640,7 @@ bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets,
        vector<double> uncV = JECUncertainty( ijet->pt(), ijet->eta(), jecUnc ) ;
 
        if ( k >= MAXJET ) break ;
-       selectedJets.push_back( &(*ijet) ) ;
+      /// selectedJets.push_back( &(*ijet) ) ;  //cannot put PFJ into Pat_Jet container
        leaves.jetPx[k] = ijet->p4().Px() ;
        leaves.jetPy[k] = ijet->p4().Py() ;
        leaves.jetPz[k] = ijet->p4().Pz() ;
