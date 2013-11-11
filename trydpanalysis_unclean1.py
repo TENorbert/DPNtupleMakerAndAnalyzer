@@ -4,7 +4,7 @@ process = cms.Process("test")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.source = cms.Source("PoolSource",
 
@@ -15,12 +15,28 @@ process.source = cms.Source("PoolSource",
 #'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/PhotonHad/RECO/PromptReco-v1/000/208/329/BA806D5E-E23C-E211-B8FF-003048F0258C.root',
 #'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/PhotonHad/RECO/PromptReco-v1/000/208/777/905A2B89-6044-E211-842A-002481E0CC00.root',
 #'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/PhotonHad/RECO/PromptReco-v1/000/208/783/AC432020-6644-E211-ABA1-003048CFB40C.root'
-#'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/SinglePhoton/AOD/PromptReco-v1/000/206/039/04005D32-E520-E211-9CEF-003048D2BC30.root',
-#'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/SinglePhoton/AOD/PromptReco-v1/000/206/220/3A67E258-B322-E211-85C3-0025B32445E0.root',
-#'dcache:/pnfs/cms/WAX/11/store/data/Run2012D/SinglePhoton/AOD/PromptReco-v1/000/206/874/3687013E-0D2B-E211-8B2C-001D09F24DA8.root'
-'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/52FB3684-C26E-E211-9655-002618943916.root',
-'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/A8A6D4EB-A76E-E211-A4FF-003048678AC0.root',
-'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/FCAFCA3E-896E-E211-9465-003048FFD728.root'
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/4E08AD76-6A6E-E211-B0FD-002590596486.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/505C4A0A-7F6E-E211-A97E-00261894396F.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/A681265D-7A6E-E211-8C36-00261894383C.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/36E965F8-7A6E-E211-9746-002618943904.root',
+'dcache://pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9EF09C37-776E-E211-9AA9-003048678C06.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F68A2210-4A6E-E211-A92D-002590596484.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F8AA2E32-776E-E211-A331-002618943924.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/FA8EF33F-7D6E-E211-9FEC-003048FFCB6A.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9E746661-4B6E-E211-AD57-0026189438D6.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F6E302EF-6D6E-E211-9ADB-0026189437E8.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000F461BBD6-6A6E-E211-BC5D-003048678B72.root/',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9E31CFB8-7D6E-E211-85A9-0026189438AD.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/4610CECE-786E-E211-B822-003048FFD770.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/44915AB7-7F6E-E211-AE9F-002618943831.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9A2894CB-496E-E211-9755-003048FFCB6A.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/3EB75AFB-7A6E-E211-9032-003048679010.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/3ECB8663-4B6E-E211-BE20-003048FFD75C.root'
+
+
+#'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/52FB3684-C26E-E211-9655-002618943916.root',
+#'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/A8A6D4EB-A76E-E211-A4FF-003048678AC0.root',
+#'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/FCAFCA3E-896E-E211-9465-003048FFD728.root'
 # 'file:input_dataSet.root'
 #'file:/local/cms/phedex/store/data/Run2012C/SinglePhoton/RECO/EXODisplacedPhoton-PromptSkim-v3/000/200/190/00000/18BB0794-8CDF-E111-B9B0-0025B31E3D3C.root'
     ),
@@ -95,8 +111,8 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_noesprefer_cff")
 #process.GlobalTag.globaltag = 'GR_R_53_V18::All'
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag( process.GlobalTag, 'GR_R_53_V14::All' )
-#process.GlobalTag = GlobalTag( process.GlobalTag, 'GR_R_53_V20' )
+#process.GlobalTag = GlobalTag( process.GlobalTag, 'GR_R_53_V10::All' )
+process.GlobalTag = GlobalTag( process.GlobalTag, 'GR_R_53_V18::All' )
 
 
 # to get clustering 

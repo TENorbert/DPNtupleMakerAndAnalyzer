@@ -299,13 +299,18 @@ class DPAnalysis : public edm::EDAnalyzer {
 
 
 //Jet selection with Timing Infor
-      void JetSelectionWithTimingInfo( edm::Handle<std::vector<pat::Jet> > patjets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons);
+//      void JetSelectionWithTimingInfo( edm::Handle<std::vector<pat::Jet> > patjets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons);
+      
+      void JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
       
 //void JetSelectionWithTimingInfo(const edm::Event& iEvent, const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets,  edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons);
 
       void JetClusterTime( reco::SuperClusterRef scRef, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, JetInfo& JetT, bool useAllClusters = false ) ;
 
 //void DPAnalysis::JetClusterTime( const edm::Event& iEvent, const edm::EventSetup& iSetup, reco::SuperClusterRef scRef, Handle<EcalRecHitCollection> recHitsEB, Handle<EcalRecHitCollection> recHitsEE, JetInfo& jetTmp, bool useAllClusters ) {
+
+//       void MatchSuperClusterToJet( const edm::Event& iEvent,const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets, reco::SuperClusterCollection *theBarelSuperClusters, reco::SuperClusterCollection *theEndcapSuperClusters, EcalClusterLazyTools* laszyTools, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,  vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons )
+
 
       bool ConversionVeto( const reco::Photon* thePhoton ) ;
       double RhoCorrection( int type , double eta ) ;
@@ -350,6 +355,10 @@ class DPAnalysis : public edm::EDAnalyzer {
       edm::InputTag cscHaloTag ;
       edm::InputTag staMuons ;
 
+    // SuperCluster infor
+ //     edm::InputTag theEndcapSuperCluster ;
+ //     edm::InputTag theBarelSuperCluster ;
+
       //edm::InputTag pileupSource ;
       edm::ESHandle<EcalIntercalibConstants> ical;
       edm::ESHandle<EcalADCToGeVConstant> agc;
@@ -374,6 +383,8 @@ class DPAnalysis : public edm::EDAnalyzer {
       // For JES Uncertainty
       JetCorrectionUncertainty *jecUnc ;
 
+  //    EcalClusterLazyTools* laszyTools ; 
+
       std::vector<double> muonCuts ;
       std::vector<double> electronCuts ;
       std::vector<double> photonCuts ;
@@ -382,7 +393,7 @@ class DPAnalysis : public edm::EDAnalyzer {
       std::vector<double> jetCuts ; 
       std::vector<double> vtxCuts ; 
 
-  //    std::vector<const reco::PFJet*> selectedJets ;
+      std::vector<const reco::PFJet*> selectedJets ;
       std::vector<pat_Jet*> selectedJets_ ;
       std::vector<const reco::GsfElectron*> selectedElectrons ;
       std::vector<const reco::Muon*> selectedMuons ;
