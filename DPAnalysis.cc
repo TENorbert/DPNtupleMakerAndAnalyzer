@@ -339,19 +339,15 @@ bool DPAnalysis::EventSelection(const edm::Event& iEvent, const edm::EventSetup&
 
    //IsoPhotonSelection( selectedPhotons ) ;
    //if ( selectedPhotons.size() < photonCuts[5] )  passEvent = false ;
-
-
-
-   selectedJets.clear() ; // if using PFJet
-   JetSelection( jets, selectedPhotons, selectedJets ) ; //if PFJ use
-  // selectedJets_.clear() ;  // if using pat_Jet
-  //JetSelection( patjets, selectedPhotons, selectedJets_ ) ; // if pat_Jet use 
+ 
+    selectedJets_.clear() ;  // if using pat_Jet
+    JetSelection( patjets, selectedPhotons, selectedJets_ ) ; // if pat_Jet use 
     // Is designed to use reco::PFJ 
-    JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons );
+    JetSelectionWithTimingInfo( patjets, recHitsEB, recHitsEE, selectedJets_, selectedPhotons );
    //bool isGammaJets = GammaJetVeto( selectedPhotons, selectedJets ) ;
    //if ( isGammaJets ) passEvent = false ;
-   if ( selectedJets.size() < jetCuts[3] )   passEvent = false ;
-   //if ( selectedJets_.size() < jetCuts[3] )   passEvent = false ;
+ //  if ( selectedJets.size() < jetCuts[3] )   passEvent = false ;
+   if ( selectedJets_.size() < jetCuts[3] )    passEvent = false ;
    if ( passEvent )   counter[9]++ ;   
    
    //JERUncertainty( patjets ) ;
@@ -1556,69 +1552,64 @@ void DPAnalysis::JERUncertainty( Handle< std::vector<pat::Jet> > patjets ) {
 }
 
 // Fxn for JetTiming
-bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
+void DPAnalysis::JetSelectionWithTimingInfo( edm::Handle<std::vector<pat::Jet> > patjets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE, vector< pat_Jet* >& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
-//bool DPAnalysis::JetSelectionWithTimingInfo( iconst edm::Event& iEvent, const edm::EventSetup& iSetup, Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
+//void DPAnalysis::JetSelectionWithTimingInfo( iconst edm::Event& iEvent, const edm::EventSetup& iSetup, Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
    int k = 0 ;
 
-   for(reco::PFJetCollection::const_iterator ijet = jets->begin(); ijet != jets->end(); ijet++) {
+   for(std::vector<pat::Jet>::const_iterator ijet = patjets->begin(); ijet != patjets->end(); ijet++) {
 
         float gammaE = ijet->photonEnergy();
       
-//        if (gammaE == 0 ) continue;  // find only jets with nonzero photonEr
+//      if (gammaE == 0 ) continue;  // find only jets with nonzero photonEr
          
-    	 std::vector<reco::PFCandidatePtr > pfcandPtr = ijet->getPFConstituents();
-        
-// Loop Potential Candidates to get Candidate with MaxEcalEnergy
-        
-	const reco::PFCandidate* thepfcandidate = 0 ;
+    	 std::vector< reco::PFCandidatePtr > pfcandPtr = ijet->getPFConstituents();
+       
+        std::cout <<"# of Jet Constituents == " << pfcandPtr.size() << std::endl ; 
+        // Loop Candidates to get Candidate with MaxEcalEnergy 
+        const reco::PFCandidate* thepfcandidate  = new PFCandidate();
+
         float MaxEmEr = 0 ;
     //    unsigned findex = 0 ; 
 	for( size_t index = 0; index < pfcandPtr.size() ; ++index){
 
         	//check if exists
-        	if( (pfcandPtr[index]).isNull() || !(pfcandPtr[index].isAvailable()) )
-           	throw cms::Exception(" Invalid Pointer to Candidate") <<"PFCandidate Ptr does not point to any valid PFCandidate";
-	   	continue;
-        	const reco::PFCandidate* pfCandidate = dynamic_cast <const reco::PFCandidate* >(pfcandPtr[index].get());
-
-        	if(pfCandidate) {std::cout <<"I found a PFCandidate..." << std::endl;
-		}else{ std::cout <<"Sorry!...Candidate found is Invalid ...."<< std::endl; }
-        	const reco::PFCandidate *isthepfcandidate = pfCandidate->clone();
-        	float CandEr  = isthepfcandidate->rawEcalEnergy(); 
+             if( (pfcandPtr[index]).isNull() ) continue ;
+      	     const reco::PFCandidate pfCandidate =  (const reco::PFCandidate)*(pfcandPtr[index] ) ;
+                //reco::PFCandidate* pfCandidate = dynamic_cast < reco::PFCandidate* >(pfcandPtr[index].get());
+       	     const reco::PFCandidate *isthepfcandidate = &pfCandidate;          
+             float CandEr  = isthepfcandidate->rawEcalEnergy(); 
        		if( CandEr > MaxEmEr ) {
                                 MaxEmEr = CandEr;
-                                thepfcandidate = isthepfcandidate;
+                               thepfcandidate = isthepfcandidate;
       //                          findex  = index;
 		 }
         }
 
-
-
-	//Now Get impt properties of this PFcandidate 
-	//const math::XYZPointF & pfPos = thepfcandidate->positionAtECALEntrance();
-         double Vx = thepfcandidate->vx();
-         double Vy = thepfcandidate->vy();
-         double Vz = thepfcandidate->vz();
-         float EcalE  = thepfcandidate->rawEcalEnergy();
-         float HcalE  = thepfcandidate->rawHcalEnergy();
-         float HoE  = (EcalE == 0)? 0 : HcalE / EcalE;
-  
-
-
-         reco::SuperClusterRef  scref = thepfcandidate->superClusterRef() ;
-
+                std::cout <<"Max Energy is == " << MaxEmEr<< std::endl;               
+                if(thepfcandidate != 0) {
+                std::cout <<"Aha! PFCandidate was Found....." << std::endl;
+                }
+		//Now Get impt properties of this PFcandidate 
+		//const math::XYZPointF & pfPos = thepfcandidate->positionAtECALEntrance();
+    	 //     double Vx = thepfcandidate->vx();
+     	//      double Vy = thepfcandidate->vy();
+     	//      double Vz = thepfcandidate->vz();
+                float EcalE  = thepfcandidate->rawEcalEnergy();
+                float HcalE  = thepfcandidate->rawHcalEnergy();
+                float HoE  = (EcalE == 0)? 0 : HcalE / EcalE;
  
- 	       //Call JetClusterTime
-         JetInfo Jinf ;
-         JetClusterTime( scref, recHitsEB, recHitsEE, Jinf, false) ; 
-         //JetClusterTime( iEvent, iSetup, scref, recHitsEB, recHitsEE, Jinf, false) ; 
+                reco::SuperClusterRef  scref = thepfcandidate->superClusterRef() ; 
+ 	        //Call JetClusterTime
+                JetInfo Jinf ;
+           
+                //I have SCRef, let me extract Jet Time                   
+                if ( scref.isNull() ) { std::cout <<"We have a RefSC which IS NULL... NOT GOOD!" << std::endl; continue; 
+                }else{
+               JetClusterTime( scref, recHitsEB, recHitsEE, Jinf, false) ; }
+               //JetClusterTime( iEvent, iSetup, scref, recHitsEB, recHitsEE, Jinf, false) ; 
 
-
-
-	//I have SCRef, let me extract Jet Time                   
-         if ( scref.isNull() ) { std::cout <<"We do have a reference to supercluster which is Null..... Trouble eh!" << std::endl; continue; }
 
        // fiducial cuts
        if ( ijet->pt() < jetCuts[0] || fabs( ijet->eta() ) > jetCuts[1] ) continue ;
@@ -1674,9 +1665,9 @@ bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets,
       leaves.jnBC[k] = Jinf.JnBC ;
       leaves.jnseedXtals[k] = Jinf.JnseedXtal ;
 
-      leaves.jCandVx[k] = Vx ;
-      leaves.jCandVy[k] = Vy ;
-      leaves.jCandVz[k] = Vz ;
+      //leaves.jCandVx[k] = Vx ;
+     // leaves.jCandVy[k] = Vy ;
+     // leaves.jCandVz[k] = Vz ;
       leaves.jCandEcalE[k] = EcalE ;
       leaves.jCandHcalE[k] = HcalE ;
       leaves.jCandHoE[k] = HoE ;
@@ -1684,10 +1675,10 @@ bool DPAnalysis::JetSelectionWithTimingInfo( Handle<reco::PFJetCollection> jets,
 
    }
 
-   leaves.nJets = (int)( selectedJets.size() ) ;
+     leaves.nJets = (int)( selectedJets.size() ) ;
 
-   if ( selectedJets.size() > 0 )  return true ; 
-   else                            return false ;    
+//   if ( selectedJets.size() > 0 )  return true ; 
+//   else                            return false ;    
 
 }
 
@@ -1701,9 +1692,6 @@ void DPAnalysis::JetClusterTime( reco::SuperClusterRef scRef, Handle<EcalRecHitC
   float adcToGeV_EE = float(agc->getEEValue());
   
  // EcalClusterLazyTools * LazyTools  = new EcalClusterLazyTools ( iEvent, iSetup, recHitsEB, recHitsEE);
-
-
-
 
   float seedtime1 = 0 ;
   float seedtimeErr = 0;
@@ -1848,10 +1836,12 @@ void DPAnalysis::JetClusterTime( reco::SuperClusterRef scRef, Handle<EcalRecHitC
 	      seedtimeErr = ( seedhit.isTimeErrorValid() ) ? seedhit.timeError() : 999999;
               seedChi2    = seedhit.chi2() ;
               seedOOtChi2 = seedhit.outOfTimeChi2() ;
-//            seedtime2  = LazyTools->BasicClusterSeedTime( (*bclus) ) ; // method to get seed xtal time of basic cluster 
+              seedtime2   = seedhit.time() ; // for now
+      //        seedtime2  = LazyTools->BasicClusterSeedTime( (*bclus) ) ; // method to get seed xtal time of basic cluster 
 
    }
 
+              seedBCtime  = 0 ; // for now 
   //            seedBCtime  = LazyTools->SuperClusterSeedTime( *scRef ) ; // get seed xtal time of of seed basic cluster as SCtime 
 
 
