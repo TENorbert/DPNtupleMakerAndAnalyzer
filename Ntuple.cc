@@ -103,13 +103,15 @@ void setBranchAddresses(TTree* chain, Ntuple& treeVars)
   chain -> SetBranchAddress("jnXtals",         treeVars.jnXtals  );
   chain -> SetBranchAddress("jnBC",            treeVars.jnBC  );
   chain -> SetBranchAddress("jnseedXtals",     treeVars.jnseedXtals  );
-  chain -> SetBranchAddress("jCandVx",         treeVars.jCandVx  );
-  chain -> SetBranchAddress("jCandVy",         treeVars.jCandVy  );
-  chain -> SetBranchAddress("jCandVz",         treeVars.jCandVz  );
+  chain -> SetBranchAddress("jnspikes",        treeVars.jnspikes  );
+//  chain -> SetBranchAddress("jCandVx",         treeVars.jCandVx  );
+//  chain -> SetBranchAddress("jCandVy",         treeVars.jCandVy  );
+//  chain -> SetBranchAddress("jCandVz",         treeVars.jCandVz  );
   chain -> SetBranchAddress("jCandEcalE",      treeVars.jCandEcalE  );
   chain -> SetBranchAddress("jCandHcalE",      treeVars.jCandHcalE  );
   chain -> SetBranchAddress("jCandHoE",        treeVars.jCandHoE  );
   chain -> SetBranchAddress("jgammaE",         treeVars.jgammaE  );
+  chain -> SetBranchAddress("jdR",             treeVars.jdR  );
   
   chain -> SetBranchAddress("phoPx",        treeVars.phoPx     );
   chain -> SetBranchAddress("phoPy",        treeVars.phoPy     );
@@ -256,13 +258,15 @@ void setBranches(TTree* chain, Ntuple& treeVars)
   chain -> Branch("jnXtals",         treeVars.jnXtals,               "jnXtals[nJets]/I" );
   chain -> Branch("jnBC",            treeVars.jnBC,               "jnBC[nJets]/I" );
   chain -> Branch("jnseedXtals",      treeVars.jnseedXtals,               "jnseedXtals[nJets]/I" );
-  chain -> Branch("jCandVx",          treeVars.jCandVx,               "jCandVx[nJets]/F" );
-  chain -> Branch("jCandVy",          treeVars.jCandVy,               "jCandVy[nJets]/F" );
-  chain -> Branch("jCandVz",          treeVars.jCandVz,               "jCandVz[nJets]/F" );
+  chain -> Branch("jnspikes",       treeVars.jnspikes,               "jnspikes[nJets]/I" );
+//  chain -> Branch("jCandVx",          treeVars.jCandVx,               "jCandVx[nJets]/F" );
+//  chain -> Branch("jCandVy",          treeVars.jCandVy,               "jCandVy[nJets]/F" );
+//  chain -> Branch("jCandVz",          treeVars.jCandVz,               "jCandVz[nJets]/F" );
   chain -> Branch("jCandEcalE",       treeVars.jCandEcalE,               "jCandEcalE[nJets]/F" );
   chain -> Branch("jCandHcalE",       treeVars.jCandHcalE,               "jCandHcalE[nJets]/F" );
   chain -> Branch("jCandHoE",        treeVars.jCandHoE,               "jCandHoE[nJets]/F" );
   chain -> Branch("jgammaE",         treeVars.jgammaE,               "jgammaE[nJets]/F" );
+  chain -> Branch("jdR",             treeVars.jdR,                   "jdR[nJets]/F" );
   
   chain -> Branch("phoPx",        treeVars.phoPx,                 "phoPx[nPhotons]/F");
   chain -> Branch("phoPy",        treeVars.phoPy,                 "phoPy[nPhotons]/F");
@@ -331,10 +335,10 @@ void initializeBranches(TTree* chain, Ntuple& treeVars)
   treeVars.triggered = 0; 
   treeVars.L1a = 0; 
   
-  treeVars.nJets      = 0 ; 
+  treeVars.nJets      = 99999.0 ; 
   treeVars.nElectrons = 0 ; 
   treeVars.nMuons     = 0 ; 
-  treeVars.nPhotons   = 0 ; 
+  treeVars.nPhotons   = 999999.0 ; 
   treeVars.nVertices  = 0 ;
   treeVars.totalNVtx  = 0 ;
   treeVars.nGen       = 0 ; 
@@ -384,27 +388,29 @@ void initializeBranches(TTree* chain, Ntuple& treeVars)
       treeVars.jecUnc[i] = 0 ;
       //treeVars.jecUncU[i] = 0 ;
       //treeVars.jecUncD[i] = 0 ;
-      treeVars.jseedtime1[i] = 0 ;
-      treeVars.jseedtime2[i] = 0 ;
-      treeVars.jseedChi2[i] = 0 ;
-      treeVars.jseedE[i] = 0 ;
-      treeVars.jseedOOtChi2[i] = 0 ;
-      treeVars.jseedBCtime[i] = 0 ;
-      treeVars.jseedtimeErr[i] = 0 ;
-      treeVars.jWavetime[i] = 0 ;
-      treeVars.jWavetimeErr[i] = 0 ;
-      treeVars.jfspike[i] = 0 ;
-      treeVars.jtChi2[i] = 0 ;
+      treeVars.jseedtime1[i] = 99999.0 ;
+      treeVars.jseedtime2[i] = 99999.0 ;
+      treeVars.jseedChi2[i] = 99999.0 ;
+      treeVars.jseedE[i] = 999999.0 ;
+      treeVars.jseedOOtChi2[i] = 99999.0 ;
+      treeVars.jseedBCtime[i] = 99999.0 ;
+      treeVars.jseedtimeErr[i] = 99999.0 ;
+      treeVars.jWavetime[i] = 999999.0 ;
+      treeVars.jWavetimeErr[i] = 999999.0 ;
+      treeVars.jfspike[i] = 999.0 ;
+      treeVars.jtChi2[i] = 9999.0 ;
       treeVars.jnXtals[i] = 99999 ;
       treeVars.jnBC[i] = 999999 ;
       treeVars.jnseedXtals[i] = 99999 ;
-      treeVars.jCandVx[i] = 0 ;
-      treeVars.jCandVy[i] = 0 ;
-      treeVars.jCandVz[i] = 0 ;
-      treeVars.jCandEcalE[i] = 0 ;
-      treeVars.jCandHcalE[i] = 0 ;
-      treeVars.jCandHoE[i] = 0 ;
-      treeVars.jgammaE[i] = 0 ;
+      treeVars.jnspikes[i] = 99.00 ;
+  //    treeVars.jCandVx[i] = 0 ;
+  //    treeVars.jCandVy[i] = 0 ;
+  //    treeVars.jCandVz[i] = 0 ;
+      treeVars.jCandEcalE[i] = 999999.0 ;
+      treeVars.jCandHcalE[i] = 999999.0 ;
+      treeVars.jCandHoE[i] = 999999.0 ;
+      treeVars.jgammaE[i] = 99999.00 ;
+      treeVars.jdR[i] = 999999.0 ;
   }
 
   for ( int i=0; i< MAXELE; i++) {

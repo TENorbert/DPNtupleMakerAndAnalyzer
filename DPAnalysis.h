@@ -166,6 +166,8 @@
 #include "GenStudy.h"
 
 #include <Math/VectorUtil.h>
+#include <Math/Vector4Dfwd.h>
+#include <Math/Vector4D.h>
 
 using namespace std ;
 
@@ -202,6 +204,8 @@ double Jfspike ;
 int    Jnxtals ;
 int     JnBC ;
 int     JnseedXtal ;
+int    Jnspikes ;
+double  JdR ; 
 };
 
 
@@ -309,7 +313,7 @@ class DPAnalysis : public edm::EDAnalyzer {
 
 //void DPAnalysis::JetClusterTime( const edm::Event& iEvent, const edm::EventSetup& iSetup, reco::SuperClusterRef scRef, Handle<EcalRecHitCollection> recHitsEB, Handle<EcalRecHitCollection> recHitsEE, JetInfo& jetTmp, bool useAllClusters ) {
 
-//       void MatchSuperClusterToJet( const edm::Event& iEvent,const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets, reco::SuperClusterCollection *theBarelSuperClusters, reco::SuperClusterCollection *theEndcapSuperClusters, EcalClusterLazyTools* laszyTools, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,  vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons )
+       void MatchSuperClusterToJet( const edm::Event& iEvent,const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets, edm::Handle<reco::SuperClusterCollection> theBarelSuperClusters, edm::Handle <reco::SuperClusterCollection> theEndcapSuperClusters, EcalClusterLazyTools* lazyTools, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,  vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons ) ;
 
 
       bool ConversionVeto( const reco::Photon* thePhoton ) ;
@@ -356,8 +360,8 @@ class DPAnalysis : public edm::EDAnalyzer {
       edm::InputTag staMuons ;
 
     // SuperCluster infor
- //     edm::InputTag theEndcapSuperCluster ;
- //     edm::InputTag theBarelSuperCluster ;
+      edm::InputTag theEndcapSuperClusterCollection_ ;
+      edm::InputTag theBarrelSuperClusterCollection_ ;
 
       //edm::InputTag pileupSource ;
       edm::ESHandle<EcalIntercalibConstants> ical;
@@ -383,7 +387,7 @@ class DPAnalysis : public edm::EDAnalyzer {
       // For JES Uncertainty
       JetCorrectionUncertainty *jecUnc ;
 
-  //    EcalClusterLazyTools* laszyTools ; 
+      EcalClusterLazyTools* lazyTools ; 
 
       std::vector<double> muonCuts ;
       std::vector<double> electronCuts ;
