@@ -1575,7 +1575,6 @@ void DPAnalysis::JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> 
 //void DPAnalysis::JetSelectionWithTimingInfo( iconst edm::Event& iEvent, const edm::EventSetup& iSetup, Handle<reco::PFJetCollection> jets, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons) {
 
    int k = 0 ; 
-   float EcalEr = 0 ; 
  //  for(std::vector<pat::Jet>::const_iterator ijet = patjets->begin(); ijet != patjets->end(); ijet++) {
    for(reco::PFJetCollection::const_iterator ijet = jets->begin(); ijet != jets->end(); ijet++) {
 
@@ -1605,7 +1604,7 @@ void DPAnalysis::JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> 
       //                          findex  = index;
 		 }
         }
-
+                
                 std::cout <<"Max Energy is == " << MaxEmEr<< std::endl;               
                 if(thepfcandidate != 0) {
                 std::cout <<"Aha! PFCandidate was Found....." << std::endl;
@@ -1624,12 +1623,12 @@ void DPAnalysis::JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> 
             //    Jinf.JWavetimeErr = 0;
     
                 //I have SCRef, let me extract Jet Time                   
-                if ( scref.isNull() ) { std::cout <<"We have a RefSC which IS NULL... NOT GOOD!" << std::endl ; continue ; 
+                if ( scref.isNull() ) { std::cout <<"We have a RefSC which IS NULL... NOT GOOD!" << std::endl ; 
                 }
            //   else{ JetClusterTime( scref, recHitsEB, recHitsEE, Jinf, false) ; }
                //JetClusterTime( iEvent, iSetup, scref, recHitsEB, recHitsEE, Jinf, false) ; 
-               EcalEr = MaxEmEr ; 
 
+          
        // fiducial cuts
        if ( ijet->pt() < jetCuts[0] || fabs( ijet->eta() ) > jetCuts[1] ) continue ;
 
@@ -1690,8 +1689,8 @@ void DPAnalysis::JetSelectionWithTimingInfo( edm::Handle<reco::PFJetCollection> 
       leaves.jCandEcalE[k] = EcalE ;
       leaves.jCandHcalE[k] = HcalE ;
       leaves.jCandHoE[k]   = HoE ;
- //   leaves.jgammaE[k] = gammaE ;
-      leaves.jgammaE[k]    = EcalEr ;
+ //   leaves.jgammaE[k]    = gammaE ;
+      leaves.jgammaE[k]    = MaxEmEr ;
        k++ ;
 
    }
@@ -1883,7 +1882,7 @@ void DPAnalysis::JetClusterTime( reco::SuperClusterRef scRef, Handle<EcalRecHitC
 void DPAnalysis::MatchSuperClusterToJet( const edm::Event& iEvent,const edm::EventSetup& iSetup, edm::Handle<reco::PFJetCollection> jets, edm::Handle<reco::SuperClusterCollection> theBarrelSuperClusters, edm::Handle<reco::SuperClusterCollection > theEndcapSuperClusters, EcalClusterLazyTools* lazyTools, edm::Handle<EcalRecHitCollection> recHitsEB, edm::Handle<EcalRecHitCollection> recHitsEE,  vector<const reco::PFJet*>& selectedJets, vector<const reco::Photon*>& selectedPhotons )
  {
 
-  int k = 0 ;
+   int k = 0 ;
    
    const EcalIntercalibConstantMap& icalMap = ical->getMap();
    float adcToGeV_EB = float(agc->getEBValue());
@@ -1949,20 +1948,19 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    if ( bclus != sclus->seed() )  continue ;  // only use seed BC
 
    nBC++ ; 
-   seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ;
+   seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ; //seed Crys Time of seed BC
 
-   // Now loop through seed
+  //get crystals & Energy in Seed BC 
    std::vector<std::pair < DetId, float > > clusterDetIdsEB  = (*(sclus->seed()) ).hitsAndFractions() ; 
    
-    // First get Seed Crys times again Method 2
-    //First make rechits
+    // Method1: Use cleaned Seed Xtal to get seed time
     const EcalRecHitCollection *rhitsEB = recHitsEB.product();
-  
+ 
+    //Get seed Xtal 
     std::pair<DetId, float> maxErecHitEB = EcalClusterTools::getMaximum( (*(sclus->seed())).hitsAndFractions(), rhitsEB );
     DetId maxEcrysIdEB = maxErecHitEB.first ; 
              
-   // if( (maxEcrysIdEB).subdetId () == EcalBarrel ) isEB = true ;
-   	     
+   //Find seed in rechits collection	     
     EcalRecHitCollection::const_iterator seedRHEB = recHitsEB->find( maxEcrysIdEB ) ;  if (seedRHEB == recHitsEB->end()) continue ; 
       
     EcalRecHit seedhitEB = (*seedRHEB) ;
@@ -1979,13 +1977,13 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
        seedcrysOOtimeChi2  = seedhitEB.outOfTimeChi2() ;
 
 
+
+   //Now Calculated W.Ave Time of seed BC
     int  nSpike  = 0 ; 
     int  nXtal   = 0 ; 
     int  nSeedXtal   = 0 ; 
-
-
  // Now Loop though Crys in Seed SC and do my own Ave time calculation:
-     for (std::vector<std::pair<DetId, float> >::const_iterator detitr = clusterDetIdsEB.begin () ; 
+   for (std::vector<std::pair<DetId, float> >::const_iterator detitr = clusterDetIdsEB.begin () ; 
            detitr != clusterDetIdsEB.end () ; ++detitr) { 
 	      // Here I use the "find" on a recHit collection... I have been warned...   (GFdoc: ??)
    	      // GFdoc: check if DetId belongs to ECAL; if so, find it among those if this basic cluster
@@ -2001,35 +1999,33 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 	     EcalRecHit myhit = (*thishit) ;
              // SIC Feb 14 2011 -- Add check on RecHit flags (takes care of spike cleaning in 42X)
              if ( !( myhit.checkFlag(EcalRecHit::kGood) || myhit.checkFlag(EcalRecHit::kOutOfTime) || myhit.checkFlag(EcalRecHit::kPoorCalib)  ) )  continue;
-//check seedHit too
              //if ( myhit.checkFlag(EcalRecHit::kWeird) || myhit.checkFlag(EcalRecHit::kDiWeird) ) continue ;
              bool gotSpike = ( myhit.checkFlag(EcalRecHit::kWeird) || myhit.checkFlag(EcalRecHit::kDiWeird) )  ;
              // swiss cross cleaning 
              float swissX = EcalTools::swissCross(detitr->first, *recHitsEB , 0.5, true ) ;
              if ( gotSpike && swissX > 0.98 ) nSpike++  ;           
+             
               nSeedXtal++  ;
+             
              // thisamp is the EB amplitude of the current rechit
              double thisamp  = myhit.energy () ;
              EcalIntercalibConstantMap::const_iterator icalit = icalMap.find(detitr->first);
-             EcalIntercalibConstant icalconst = 1;
+             EcalIntercalibConstant icalconst = 1.0 ;
              if( icalit!=icalMap.end() ) {
-               icalconst = (*icalit);
+               icalconst = (*icalit) ;
              } else {
-               edm::LogError("EcalTimePhyTreeMaker") << "No intercalib const found for xtal " << (detitr->first).rawId();
+               edm::LogError("EcalTimePhyTreeMaker") << "No intercalib const found for xtal " << (detitr->first).rawId() ;
              }
 
              // get laser coefficient
-             float lasercalib = laser->getLaserCorrection( detitr->first, eventTime );
-
+             float lasercalib = laser->getLaserCorrection( detitr->first, eventTime ) ;
              float adcToGeV =  adcToGeV_EB ;  
-            // float adcToGeV =  adcToGeV_EE ;
              // discard rechits with A/sigma < 12
              float adc  = thisamp/(icalconst*lasercalib*adcToGeV) ;
            //  if ( thisamp/(icalconst*lasercalib*adcToGeV) < (1.1*12) ) continue;
              // don't consider recHits with too litte amplitude and take sigma_noise_total account
              if( EEhit  &&  (adc  < (1.1*20)) ) continue ;
       
-    //       if( !isEB &&  (adc  < (2.2*20)) ) continue ;
 
              //GlobalPoint pos = theGeometry->getPosition((myhit).detid());
              // time and time correction
@@ -2050,11 +2046,11 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
            //  if ( fabs ( thistime - seedBCWtime ) > 3.*jetTmp.JWavetimeErr ) continue ;
              xtime     += thistime / pow( xtimeErr_ , 2 ) ;
              xtimeErr  += 1/ pow( xtimeErr_ , 2 ) ;
-             nBC ++ ;
              
               
-              }  /// end of Loop over crys in Seed BC
+            }  /// end of Loop over crys in Seed BC
 
+            nBC ++ ;
 
              BCWavetime     = xtime / xtimeErr ;
              BCWavetimeErr    = 1. / sqrt( xtimeErr) ;
@@ -2071,12 +2067,12 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
  // Loop over supercluster for matching   
  for(reco::SuperClusterCollection::const_iterator sclus = theEndcapSuperClusters->begin() ; sclus != theEndcapSuperClusters->end() ; ++sclus ) {
 
-   double delR      = 0.0 ; 
-   double xtime = 0 ;
-   double xtimeErr = 0 ;
-   int nBC  = 0 ;
-   double  ndof = 0 ;
-   double  chi2_bc = 0 ;
+   double delR        = 0.0 ; 
+   double xtime       = 0 ;
+   double xtimeErr    = 0 ;
+   int nBC            = 0 ;
+   double  ndof       = 0 ;
+   double  chi2_bc    = 0 ;
    double  et  = (sclus->position().eta() == 0 )? 0 : sclus->rawEnergy()/TMath::CosH(sclus->position().eta() ) ; 
    double eta  = sclus->position().eta() ;
    double  phi  = sclus->position().phi() ;
@@ -2089,7 +2085,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
    delR  = ROOT::Math::VectorUtil::DeltaR( ijet->p4(), SCluster4Vector ) ; 
 
-    deltaR  = delR ; 
+   deltaR  = delR ; 
    if ( delR  >  jetCuts[2] ) continue ; 
    
    // W ave BC time of seed BC in SC
@@ -2099,7 +2095,6 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
   
    if ( bclus != sclus->seed() )  continue ;  // only use seed BC
    
-   nBC++ ; 
    seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ;
 
    // Now loop through seed
@@ -2173,7 +2168,6 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              float lasercalib = laser->getLaserCorrection( detitr->first, eventTime );
 
              float adcToGeV =  adcToGeV_EE  ;   
-            // float adcToGeV =  adcToGeV_EE ;
              // discard rechits with A/sigma < 12
              float adc  = thisamp/(icalconst*lasercalib*adcToGeV) ;
            //  if ( thisamp/(icalconst*lasercalib*adcToGeV) < (1.1*12) ) continue;
@@ -2204,6 +2198,8 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
               }  /// end of Loop over crys in Seed BC
 
 
+             nBC++ ; 
+             
              BCWavetime     = xtime / xtimeErr ;
              BCWavetimeErr    = 1. / sqrt( xtimeErr) ;
              BCtimeChi2 = ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
@@ -2217,7 +2213,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
   
   } // eof EE
 
-         double dR  =  9999 ; 
+       double dR  =  9999 ; 
          
        for (size_t j=0; j < selectedPhotons.size(); j++ ) {
            double dR_ =  ROOT::Math::VectorUtil::DeltaR( ijet->p4(), selectedPhotons[j]->p4() ) ;
@@ -2227,22 +2223,24 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
        if ( k >= MAXJET ) break ;
       //Fill Jet info
-      leaves.jseedtime1[k] = seedcrystime ;  //spike cleaned Xtal time
-      leaves.jseedtime2[k] = seedcrystime1 ;  // No spike cleaned Xtal time
-      leaves.jseedChi2[k] =  seedcrystimeChi2 ;
-      leaves.jseedE[k]    =     seedcrysE ;
-      leaves.jseedOOtChi2[k] =  seedcrysOOtimeChi2 ;
-      leaves.jseedBCtime[k] =   seedBCWtime ;  //seedXtal in seed BC
-      leaves.jseedtimeErr[k] =  seedcrystimeErr ;
-      leaves.jWavetime[k] = BCWavetime ;
-      leaves.jWavetimeErr[k] = BCWavetimeErr ;
-      leaves.jfspike[k] = fspike ;
-      leaves.jtChi2[k] = BCtimeChi2 ;
-      leaves.jnXtals[k] = NCrys ;
-      leaves.jnBC[k] = numBC ;
-      leaves.jnseedXtals[k] = nseedXtal ;
-      leaves.jnspikes[k] = Nspikes ;
-      leaves.jdR[k] = deltaR ;
+      leaves.jseedtime1[k]        = seedcrystime ;  //spike cleaned seed Xtal time
+      leaves.jseedtime2[k]        = seedcrystime1 ;  // No spike cleaned seed Xtal time
+      leaves.jseedChi2[k]         =  seedcrystimeChi2 ;
+      leaves.jseedE[k]            =     seedcrysE ;
+      leaves.jseedOOtChi2[k]      =  seedcrysOOtimeChi2 ;
+      leaves.jseedBCtime[k]       =   seedBCWtime ;  // seed BC Error W.Ave time
+      leaves.jseedtimeErr[k]      =  seedcrystimeErr ;
+      leaves.jWavetime[k]         = BCWavetime ;   // W.Ave Seed BC time
+      leaves.jWavetimeErr[k]      = BCWavetimeErr ;
+      leaves.jfspike[k]           = fspike ;
+      leaves.jtChi2[k]            = BCtimeChi2 ;
+      leaves.jnXtals[k]           = NCrys ;
+      leaves.jnBC[k]              = numBC ;
+      leaves.jnseedXtals[k]       = nseedXtal ;
+      leaves.jnspikes[k]          = Nspikes ;
+      leaves.jdR[k]               = deltaR ;
+      k++ ;
+
    }
 
 
