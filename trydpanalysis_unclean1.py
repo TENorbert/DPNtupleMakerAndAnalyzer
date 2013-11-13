@@ -4,7 +4,7 @@ process = cms.Process("test")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(50000) )
 
 process.source = cms.Source("PoolSource",
 
@@ -31,7 +31,43 @@ process.source = cms.Source("PoolSource",
 'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/44915AB7-7F6E-E211-AE9F-002618943831.root',
 'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9A2894CB-496E-E211-9755-003048FFCB6A.root',
 'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/3EB75AFB-7A6E-E211-9032-003048679010.root',
-'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/3ECB8663-4B6E-E211-BE20-003048FFD75C.root'
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/3ECB8663-4B6E-E211-BE20-003048FFD75C.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/DCB19AAB-6F6E-E211-A3A1-003048678FA0.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/EAC583A9-846E-E211-A422-003048678BE8.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/EA98ABBB-7C6E-E211-B737-003048FFD732.root'
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/4092854D-7B6E-E211-A943-002618943901.root', 
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9A74F70D-806E-E211-BB7F-003048678B36.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/EEAD35E8-756E-E211-B3C2-00304867C1BA.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/40AA95E7-6D6E-E211-B2F6-0026189438A7.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9A837C9A-5F6E-E211-ABB3-002618943980.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/EEB3FDA1-846E-E211-BE48-00261894396E.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/40C1A7D0-6A6E-E211-AFEB-003048678A78.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9AE11D9D-856E-E211-80FE-00304867C1BA.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F006F4DB-816E-E211-887F-002618943858.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/40D3E6C5-6A6E-E211-83AF-003048679296.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9AFA2988-846E-E211-B481-003048678C26.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F0177E2A-7F6E-E211-86D1-003048678AE4.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/40E17631-7F6E-E211-BD2B-0025905964B6.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C04EDAD-496E-E211-8669-0026189438DB.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F01A0215-5E6E-E211-94BB-003048678B14.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/40E2DA47-4A6E-E211-B2D1-00261894395B.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C07E2AE-826E-E211-B512-002618FDA28E.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F020C290-766E-E211-BDB7-00304867908C.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/4222872D-856E-E211-9967-003048FFD7A2.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C1C6A23-806E-E211-AC74-002618943973.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F06CCD45-796E-E211-90A2-003048FFCBB0.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/423E2C42-736E-E211-A365-003048678DA2.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C5A8427-796E-E211-B655-002618943979.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F06E208D-826E-E211-8D21-002618943954.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/42693B04-6D6E-E211-AAC5-002618943807.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C5F2774-6B6E-E211-845E-003048678B3C.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F0BE6351-7B6E-E211-B0DE-0026189438AF.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/4298FE10-7D6E-E211-8ACC-00261894389E.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C717383-496E-E211-A89A-0026189438B3.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F0DC7C21-6F6E-E211-B3AF-00261894386A.root',
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/42CF51BA-496E-E211-9304-00248C55CC3C.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/9C890DD5-776E-E211-966D-003048678FD6.root',  
+'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/RECO/22Jan2013-v1/20000/F2419238-776E-E211-9C56-002618943886.root'
 
 
 #'dcache:/pnfs/cms/WAX/11/store/data/Run2012C/SinglePhoton/AOD/22Jan2013-v1/20000/52FB3684-C26E-E211-9655-002618943916.root',
@@ -62,7 +98,7 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
 
 process.ana = cms.EDAnalyzer('DPAnalysis',
-    rootFileName     = cms.untracked.string('run2012D.root'),
+    rootFileName     = cms.untracked.string('run2012C.root'),
     triggerName      = cms.vstring('HLT_Photon50_CaloIdVL_IsoL','HLT_DisplacedPhoton65_CaloIdVL_IsoL_PFMET25'),
     L1GTSource       = cms.string('L1_SingleEG22'),
     L1Select         = cms.bool( False ),
@@ -85,6 +121,10 @@ process.ana = cms.EDAnalyzer('DPAnalysis',
     beamSpotSource   = cms.InputTag("offlineBeamSpot"),
     EBRecHitCollection = cms.InputTag("reducedEcalRecHitsEB"),
     EERecHitCollection = cms.InputTag("reducedEcalRecHitsEE"),
+    
+    BarrelSuperClusterCollection = cms.InputTag("correctedHybridSuperClusters",""),
+    EndcapSuperClusterCollection = cms.InputTag("correctedMulti5x5SuperClustersWithPreshower",""),
+    
     tau                = cms.double( 1000 ), 
     genParticles = cms.InputTag("genParticles"),
 
@@ -92,7 +132,7 @@ process.ana = cms.EDAnalyzer('DPAnalysis',
     # vertex cuts                z   ndof   d0 
     vtxCuts       = cms.vdouble( 99,    0,  99 ),
     # photon cuts                pt   eta  sMajMax,  sMinMin, sMinMax,   dR,  Num  leadingPt  
-    photonCuts    = cms.vdouble( 45,  2.5,     99.,      -1.,     99.,   0.0,  1,    45  ),
+    photonCuts    = cms.vdouble( 45,  3.5,     99.,      -1.,     99.,   0.0,  1,    45  ),
     # photon isolation           trkR,  ecalSumEt, ecalR, hcalSumEt, hcalR 
     photonIso     = cms.vdouble(  1.,       5.0,   1.,       5.0,   1. ),
     # jet cuts                   pt    eta    dR,  nJets
