@@ -2009,7 +2009,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
               nSeedXtalEB++  ;
              
              // thisamp is the EB amplitude of the current rechit
-             float thisamp  = myhit.energy () ;
+             float thisamp  = (float) myhit.energy () ;
              EcalIntercalibConstantMap::const_iterator icalit = icalMap.find(detitr->first);
              EcalIntercalibConstant icalconst = 1.0 ;
              if( icalit!=icalMap.end() ) {
@@ -2019,10 +2019,10 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              }
 
              // get laser coefficient
-             float lasercalib = laser->getLaserCorrection( detitr->first, eventTime ) ;
+             float lasercalib = (float) laser->getLaserCorrection( detitr->first, eventTime ) ;
              float adcToGeV =  adcToGeV_EB ;  
              // discard rechits with A/sigma < 12
-             float adc  = thisamp/(icalconst*lasercalib*adcToGeV) ;
+             float adc  = (float) thisamp/(icalconst*lasercalib*adcToGeV) ;
            //  if ( thisamp/(icalconst*lasercalib*adcToGeV) < (1.1*12) ) continue;
              // don't consider recHits with too litte amplitude and take sigma_noise_total account
              if( EEhit  &&  (adc  < (1.1*20)) ) continue ;
@@ -2030,15 +2030,15 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
              //GlobalPoint pos = theGeometry->getPosition((myhit).detid());
              // time and time correction
-	     float thistime = ( myhit.isTimeValid() ) ? myhit.time() : 999999 ;
+	     float thistime = (float)( myhit.isTimeValid() ) ? myhit.time() : 999999 ;
 
 	     //thistime += theTimeCorrector_.getCorrection((float) thisamp/(icalconst*lasercalib*adcToGeV), pos.eta()  );
 
              // get time error 
-             float xtimeErr_ = ( myhit.isTimeErrorValid() ) ?  myhit.timeError() : 999999 ;
+             float xtimeErr_ =(float) ( myhit.isTimeErrorValid() ) ?  myhit.timeError() : 999999 ;
 
              // calculate chi2 for the BC of the seed
-             float chi2_x = pow( ((thistime - seedBCWtime) / xtimeErr_ ) , 2 ) ; 
+             float chi2_x = (float) pow( ((thistime - seedBCWtime) / xtimeErr_ ) , 2 ) ; 
 
              chi2_bc += chi2_x ;
              ndof += 1 ;
@@ -2053,14 +2053,14 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
              nBCEB ++ ;
 
-             BCWavetime     = xtime / xtimeErr ;
-             BCWavetimeErr    = 1. / sqrt( xtimeErr) ;
-             BCtimeChi2 = ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
+             BCWavetime     = (float) xtime / xtimeErr ;
+             BCWavetimeErr    = (float)1. / sqrt( xtimeErr) ;
+             BCtimeChi2 = (float) ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
              fspike = ( nSeedXtalEB > 0 ) ? (nSpikeEB*1.) / (nSeedXtalEB*1.) : -99999 ;
-             NCrys = nXtalEB ;
-             nseedXtal  = nSeedXtalEB ;
-             Nspikes    = nSpikeEB  ; 
-             nUnmatchedJets = njEB ;
+             NCrys = (int) nXtalEB ;
+             nseedXtal  = (int) nSeedXtalEB ;
+             Nspikes    = (int) nSpikeEB  ; 
+             nUnmatchedJets = (int) njEB ;
          }
 
   
@@ -2157,7 +2157,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              if ( gotSpike && swissX > 0.98 ) nSpikeEE++  ;           
               nSeedXtalEE++  ;
              // thisamp is the EB amplitude of the current rechit
-             double thisamp  = myhit.energy () ;
+             float thisamp  = (float) myhit.energy () ;
              EcalIntercalibConstantMap::const_iterator icalit = icalMap.find(detitr->first);
              EcalIntercalibConstant icalconst = 1;
              if( icalit!=icalMap.end() ) {
@@ -2178,15 +2178,15 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
              //GlobalPoint pos = theGeometry->getPosition((myhit).detid());
              // time and time correction
-	     float thistime = ( myhit.isTimeValid() ) ? myhit.time() : 999999 ;
+	     float thistime = (float) ( myhit.isTimeValid() ) ? myhit.time() : 999999 ;
 
 	     //thistime += theTimeCorrector_.getCorrection((float) thisamp/(icalconst*lasercalib*adcToGeV), pos.eta()  );
 
              // get time error 
-             float xtimeErr_ = ( myhit.isTimeErrorValid() ) ?  myhit.timeError() : 999999 ;
+             float xtimeErr_ = (float) ( myhit.isTimeErrorValid() ) ?  myhit.timeError() : 999999 ;
 
              // calculate chi2 for the BC of the seed
-             float chi2_x = pow( ((thistime - seedBCWtime) / xtimeErr_ ) , 2 ) ; 
+             float chi2_x =  (float)pow( ((thistime - seedBCWtime) / xtimeErr_ ) , 2 ) ; 
 
              chi2_bc += chi2_x ;
              ndof += 1 ;
@@ -2201,15 +2201,15 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
 
              
              nBCEE++ ; 
-             BCWavetime     = xtime / xtimeErr ;
-             BCWavetimeErr    = 1. / sqrt( xtimeErr) ;
-             BCtimeChi2 = ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
+             BCWavetime     = (float) xtime / xtimeErr ;
+             BCWavetimeErr    = (float)1. / sqrt( xtimeErr) ;
+             BCtimeChi2 = (float) ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
              fspike = ( nSeedXtalEE > 0 ) ? (nSpikeEE*1.) / (nSeedXtalEE*1.) : -99999 ;
-             NCrys = nXtalEE ;
-             numBC    = nBCEE ;
-             nseedXtal  = nSeedXtalEE ;
-             Nspikes    = nSpikeEE  ;
-             nUnmatchedJets = njEE ;
+             NCrys =  (int)nXtalEE ;
+             numBC    = (int)nBCEE ;
+             nseedXtal  = (int)nSeedXtalEE ;
+             Nspikes    = (int)nSpikeEE  ;
+             nUnmatchedJets = (int) njEE ;
          }
 
   
@@ -2227,11 +2227,11 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
       //Fill Jet info
       leaves.jseedtime1[k]        = seedcrystime ;  //spike cleaned seed Xtal time
       leaves.jseedtime2[k]        = seedcrystime1 ;  // No spike cleaned seed Xtal time
-      leaves.jseedChi2[k]         =  seedcrystimeChi2 ;
-      leaves.jseedE[k]            =  seedcrysE ;
-      leaves.jseedOOtChi2[k]      =  seedcrysOOtimeChi2 ;
-      leaves.jseedBCtime[k]       =   seedBCWtime ;  // seed BC Error W.Ave time
-      leaves.jseedtimeErr[k]      =  seedcrystimeErr ;
+      leaves.jseedChi2[k]         = seedcrystimeChi2 ;
+      leaves.jseedE[k]            = seedcrysE ;
+      leaves.jseedOOtChi2[k]      = seedcrysOOtimeChi2 ;
+      leaves.jseedBCtime[k]       = seedBCWtime ;  // seed BC Error W.Ave time
+      leaves.jseedtimeErr[k]      = seedcrystimeErr ;
       leaves.jWavetime[k]         = BCWavetime ;   // W.Ave Seed BC time
       leaves.jWavetimeErr[k]      = BCWavetimeErr ;
       leaves.jfspike[k]           = fspike ;
