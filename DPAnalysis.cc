@@ -1971,7 +1971,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
      //Check if hit is topological spike
     if ( seedhitEB.checkFlag(EcalRecHit::kWeird) || seedhitEB.checkFlag(EcalRecHit::kDiWeird) ) continue ;
      
-       seedcrystime  = ( seedhitEB.isTimeValid() ) ?  seedhitEB.time() : -99999 ;
+       seedcrystime  = (float)( seedhitEB.isTimeValid() ) ?  seedhitEB.time() : -99999 ;
        seedcrysE     =  (float) seedhitEB.energy() ;
        seedcrystimeErr = (float)( seedhitEB.isTimeErrorValid() ) ? seedhitEB.timeError() : -99999;
        seedcrystimeChi2    = (float)seedhitEB.chi2() ;
@@ -2121,7 +2121,7 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
      //Check if hit is topological spike
     if ( seedhitEE.checkFlag(EcalRecHit::kWeird) || seedhitEE.checkFlag(EcalRecHit::kDiWeird) ) continue ;
      
-       seedcrystime  = ( seedhitEE.isTimeValid() ) ?  seedhitEE.time() : -99999 ;
+       seedcrystime  = (float)( seedhitEE.isTimeValid() ) ?  seedhitEE.time() : -99999 ;
        seedcrysE     = (float) seedhitEE.energy() ;
        seedcrystimeErr =(float) ( seedhitEE.isTimeErrorValid() ) ? seedhitEE.timeError() : -99999;
        seedcrystimeChi2    = (float) seedhitEE.chi2() ;
