@@ -78,6 +78,7 @@ struct Ntuple
   float jCandHoE[MAXJET];
   float jgammaE[MAXJET];
   float jdR[MAXJET];
+  float jnUnMatched[MAXJET];
   
 
   float metPx;

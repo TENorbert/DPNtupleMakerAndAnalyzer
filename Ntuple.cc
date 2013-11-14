@@ -112,6 +112,7 @@ void setBranchAddresses(TTree* chain, Ntuple& treeVars)
   chain -> SetBranchAddress("jCandHoE",        treeVars.jCandHoE  );
   chain -> SetBranchAddress("jgammaE",         treeVars.jgammaE  );
   chain -> SetBranchAddress("jdR",             treeVars.jdR  );
+  chain -> SetBranchAddress("jnUnMatched",     treeVars.jnUnMatched  );
   
   chain -> SetBranchAddress("phoPx",        treeVars.phoPx     );
   chain -> SetBranchAddress("phoPy",        treeVars.phoPy     );
@@ -267,6 +268,7 @@ void setBranches(TTree* chain, Ntuple& treeVars)
   chain -> Branch("jCandHoE",        treeVars.jCandHoE,               "jCandHoE[nJets]/F" );
   chain -> Branch("jgammaE",         treeVars.jgammaE,               "jgammaE[nJets]/F" );
   chain -> Branch("jdR",             treeVars.jdR,                   "jdR[nJets]/F" );
+  chain -> Branch("jnUnMatched",     treeVars.jnUnMatched,            "jnUnMatched[nJets]/F" );
   
   chain -> Branch("phoPx",        treeVars.phoPx,                 "phoPx[nPhotons]/F");
   chain -> Branch("phoPy",        treeVars.phoPy,                 "phoPy[nPhotons]/F");
@@ -411,6 +413,7 @@ void initializeBranches(TTree* chain, Ntuple& treeVars)
       treeVars.jCandHoE[i] = 999999.0 ;
       treeVars.jgammaE[i] = 99999.00 ;
       treeVars.jdR[i] = 999999.0 ;
+      treeVars.jnUnMatched[i] = 999999.0 ;
   }
 
   for ( int i=0; i< MAXELE; i++) {
