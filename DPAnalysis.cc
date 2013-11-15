@@ -143,6 +143,7 @@ DPAnalysis::~DPAnalysis()
    CutFlowTree->Write() ; 
    h_z0->Write() ;
 
+   theFile->Write() ;
    theFile->Close() ;
 
 }
