@@ -1885,7 +1885,6 @@ void DPAnalysis::MatchSuperClusterToJet( const edm::Event& iEvent,const edm::Eve
 
    int k = 0 ;
    int nUnmatchedJets = 0 ;
-   
    const EcalIntercalibConstantMap& icalMap = ical->getMap();
    float adcToGeV_EB = float(agc->getEBValue());
    float adcToGeV_EE = float(agc->getEEValue());
@@ -1912,6 +1911,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    float fspike              = 0 ;
  
    float deltaR              = 0.0 ; 
+   float SBClusEnergy        =  0 ; 
+   float SBClusEt            =  0 ; 
+   float SBClusPt            =  0 ; 
    
    ROOT::Math::PtEtaPhiEVector SCluster4Vector ( 0, 0 ,0 ,0 ) ; 
    bool isEB  = false ; 
@@ -1922,7 +1924,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    // Loop over supercluster for matching   
    for(reco::SuperClusterCollection::const_iterator sclus = theBarrelSuperClusters->begin() ; sclus != theBarrelSuperClusters->end() ; ++sclus ) {
 
-
+   float EBseedBasicClusterEnergy = 0 ;
+   float EBseedBasicClusterEt     = 0 ;
+   float EBseedBasicClusterPt     = 0 ;
    float delR      = 0 ; 
    float xtime     = 0 ;
    float xtimeErr  = 0 ;
@@ -1947,8 +1951,15 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    seedBCWtime  =  lazyTools->SuperClusterTime( *sclus, iEvent ) ; 
     
    reco::CaloClusterPtr  bclus = sclus->seed() ;
-  
+ 
+ 
    if ( bclus != sclus->seed() )  continue ;  // only use seed BC
+
+   EBseedBasicClusterEnergy = (*bclus).energy() ;
+   double  bcEta  = (*bclus).eta();
+   double  sinTheta = fabs( TMath::Sin( 2*TMath::ATan(-1*bcEta) ) ) ;
+   EBseedBasicClusterEt =  EBseedBasicClusterEnergy/TMath::CosH( bcEta) ;
+   EBseedBasicClusterPt =  EBseedBasicClusterEnergy*sinTheta ;
 
    seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ; //seed Crys Time of seed BC
 
@@ -2062,6 +2073,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              nseedXtal  = (int) nSeedXtalEB ;
              Nspikes    = (int) nSpikeEB  ; 
              nUnmatchedJets = (int) njEB ;
+             SBClusEnergy =  EBseedBasicClusterEnergy ; 
+             SBClusEt     =  EBseedBasicClusterEt ; 
+             SBClusPt     =  EBseedBasicClusterPt ;
          }
 
   
@@ -2069,6 +2083,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
  // Loop over supercluster for matching   
  for(reco::SuperClusterCollection::const_iterator sclus = theEndcapSuperClusters->begin() ; sclus != theEndcapSuperClusters->end() ; ++sclus ) {
 
+   float EEseedBasicClusterEnergy = 0 ;
+   float EEseedBasicClusterEt     = 0 ;
+   float EEseedBasicClusterPt     = 0 ;
    float  delR        = 0.0 ; 
    float  xtime       = 0 ;
    float  xtimeErr    = 0 ;
@@ -2097,6 +2114,12 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    reco::CaloClusterPtr  bclus = sclus->seed() ;
   
    if ( bclus != sclus->seed() )  continue ;  // only use seed BC
+   
+   EEseedBasicClusterEnergy = (*bclus).energy() ;
+   double  bcEta  = (*bclus).eta();
+   double  sinTheta = fabs( TMath::Sin( 2*TMath::ATan(-1*bcEta) ) ) ;
+   EEseedBasicClusterEt =  EEseedBasicClusterEnergy/TMath::CosH( bcEta) ;
+   EEseedBasicClusterPt =  EEseedBasicClusterEnergy*sinTheta ;
    
    seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ;
 
@@ -2211,6 +2234,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              nseedXtal  = (int)nSeedXtalEE ;
              Nspikes    = (int)nSpikeEE  ;
              nUnmatchedJets = (int) njEE ;
+             SBClusEnergy =  EEseedBasicClusterEnergy ; 
+             SBClusEt     =  EEseedBasicClusterEt ; 
+             SBClusPt     =  EEseedBasicClusterPt ;
          }
 
   
@@ -2243,6 +2269,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
       leaves.jnspikes[k]          = Nspikes ;
       leaves.jdR[k]               = deltaR ;
       leaves.jnUnMatched[k]       = nUnmatchedJets  ;
+      leaves.jseedBCEnergy[k]     = SBClusEnergy ;
+      leaves.jseedBCEt[k]         = SBClusEt ;
+      leaves.jseedBCPt[k]         = SBClusPt ; 
       k++ ;
 
    }
