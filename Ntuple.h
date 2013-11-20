@@ -4,7 +4,7 @@
 #include "TChain.h" 
 
 #define MAXVTX 30
-#define MAXJET 15
+#define MAXJET 20
 #define MAXPHO 12
 #define MAXMU 5
 #define MAXELE 5
@@ -70,9 +70,9 @@ struct Ntuple
   int jnBC[MAXJET];
   int jnseedXtals[MAXJET];
   int jnspikes[MAXJET];
-  int jseedBCEnergy[MAXJET];
-  int jseedBCEt[MAXJET];
-  int jseedBCPt[MAXJET];
+  float jseedBCEnergy[MAXJET];
+  float jseedBCEt[MAXJET];
+  float jseedBCPt[MAXJET];
  // float jCandVx[MAXJET];
  // float jCandVy[MAXJET];
  // float jCandVz[MAXJET];
@@ -81,7 +81,7 @@ struct Ntuple
   float jCandHoE[MAXJET];
   float jgammaE[MAXJET];
   float jdR[MAXJET];
-  float jnUnMatched[MAXJET];
+  int jnUnMatched[MAXJET];
   
 
   float metPx;

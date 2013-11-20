@@ -1908,13 +1908,12 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    int    numBC               = 0 ;  
    int    Nspikes             = 0 ;
    int    nseedXtal           = 0 ;
-   float fspike              = 0 ;
+   float fspike               = 0.0 ;
  
-   float deltaR              = 0.0 ; 
-   float SBClusEnergy        =  0 ; 
-   float SBClusEt            =  0 ; 
-   float SBClusPt            =  0 ; 
-   
+   float deltaR              =  0.0 ; 
+   float SBClusEnergy        =  0.0 ; 
+   float SBClusEt            =  0.0 ; 
+   float SBClusPt            =  0.0 ; 
    ROOT::Math::PtEtaPhiEVector SCluster4Vector ( 0, 0 ,0 ,0 ) ; 
    bool isEB  = false ; 
   
@@ -1924,14 +1923,14 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    // Loop over supercluster for matching   
    for(reco::SuperClusterCollection::const_iterator sclus = theBarrelSuperClusters->begin() ; sclus != theBarrelSuperClusters->end() ; ++sclus ) {
 
-   float EBseedBasicClusterEnergy = 0 ;
-   float EBseedBasicClusterEt     = 0 ;
-   float EBseedBasicClusterPt     = 0 ;
-   float delR      = 0 ; 
-   float xtime     = 0 ;
-   float xtimeErr  = 0 ;
-   float  ndof     = 0 ;
-   float  chi2_bc  = 0 ;
+   float EBseedBasicClusterEnergy = 0.0 ;
+   float EBseedBasicClusterEt     = 0.0 ;
+   float EBseedBasicClusterPt     = 0.0 ;
+   float delR      = 0.0 ; 
+   float xtime     = 0.0 ;
+   float xtimeErr  = 0.0 ;
+   float  ndof     = 0.0 ;
+   float  chi2_bc  = 0.0 ;
    int nBCEB          = 0 ;
    int     njEB     = 0 ;
    double  et  = (sclus->position().eta() == 0 )? 0 : sclus->rawEnergy()/TMath::CosH(sclus->position().eta() ) ;
@@ -1961,6 +1960,10 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    EBseedBasicClusterEt =  EBseedBasicClusterEnergy/TMath::CosH( bcEta) ;
    EBseedBasicClusterPt =  EBseedBasicClusterEnergy*sinTheta ;
 
+  std::cout <<" EB seed SClus Pt =  " <<  EBseedBasicClusterPt << std::endl ; 
+       SBClusEnergy =  EBseedBasicClusterEnergy ; 
+       SBClusEt     =  EBseedBasicClusterEt ; 
+       SBClusPt     =  EBseedBasicClusterPt ;
    seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ; //seed Crys Time of seed BC
 
   //get crystals & Energy in Seed BC 
@@ -2064,7 +2067,6 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
             }  /// end of Loop over crys in Seed BC
 
              nBCEB ++ ;
-
              BCWavetime     = (float) xtime / xtimeErr ;
              BCWavetimeErr    = (float)1. / sqrt( xtimeErr) ;
              BCtimeChi2 = (float) ( ndof != 0 ) ? chi2_bc / ndof : -99999 ;     
@@ -2073,9 +2075,6 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              nseedXtal  = (int) nSeedXtalEB ;
              Nspikes    = (int) nSpikeEB  ; 
              nUnmatchedJets = (int) njEB ;
-             SBClusEnergy =  EBseedBasicClusterEnergy ; 
-             SBClusEt     =  EBseedBasicClusterEt ; 
-             SBClusPt     =  EBseedBasicClusterPt ;
          }
 
   
@@ -2083,9 +2082,9 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
  // Loop over supercluster for matching   
  for(reco::SuperClusterCollection::const_iterator sclus = theEndcapSuperClusters->begin() ; sclus != theEndcapSuperClusters->end() ; ++sclus ) {
 
-   float EEseedBasicClusterEnergy = 0 ;
-   float EEseedBasicClusterEt     = 0 ;
-   float EEseedBasicClusterPt     = 0 ;
+   float EEseedBasicClusterEnergy = 0.0 ;
+   float EEseedBasicClusterEt     = 0.0 ;
+   float EEseedBasicClusterPt     = 0.0 ;
    float  delR        = 0.0 ; 
    float  xtime       = 0 ;
    float  xtimeErr    = 0 ;
@@ -2120,7 +2119,10 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    double  sinTheta = fabs( TMath::Sin( 2*TMath::ATan(-1*bcEta) ) ) ;
    EEseedBasicClusterEt =  EEseedBasicClusterEnergy/TMath::CosH( bcEta) ;
    EEseedBasicClusterPt =  EEseedBasicClusterEnergy*sinTheta ;
-   
+  std::cout <<" seed SClus Pt =  " <<  EEseedBasicClusterPt << std::endl ; 
+       SBClusEnergy =  EEseedBasicClusterEnergy ; 
+       SBClusEt     =  EEseedBasicClusterEt ; 
+       SBClusPt     =  EEseedBasicClusterPt ;
    seedcrystime1  = lazyTools ->BasicClusterSeedTime( *bclus ) ;
 
    // Now loop through seed
@@ -2234,9 +2236,6 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
              nseedXtal  = (int)nSeedXtalEE ;
              Nspikes    = (int)nSpikeEE  ;
              nUnmatchedJets = (int) njEE ;
-             SBClusEnergy =  EEseedBasicClusterEnergy ; 
-             SBClusEt     =  EEseedBasicClusterEt ; 
-             SBClusPt     =  EEseedBasicClusterPt ;
          }
 
   
@@ -2268,11 +2267,14 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
       leaves.jnseedXtals[k]       = nseedXtal ;
       leaves.jnspikes[k]          = Nspikes ;
       leaves.jdR[k]               = deltaR ;
-      leaves.jnUnMatched[k]       = nUnmatchedJets  ;
+      leaves.jnUnMatched[k]       = nUnmatchedJets ;
       leaves.jseedBCEnergy[k]     = SBClusEnergy ;
       leaves.jseedBCEt[k]         = SBClusEt ;
       leaves.jseedBCPt[k]         = SBClusPt ; 
       k++ ;
+  
+
+//     std::cout <<"Seed Basic Cluster Pt =  " << SBClusPt << std::endl ;
 
    }
 
