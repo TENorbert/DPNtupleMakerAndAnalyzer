@@ -143,7 +143,7 @@ DPAnalysis::~DPAnalysis()
    CutFlowTree->Write() ; 
    h_z0->Write() ;
 
-   theFile->Write() ;
+ //  theFile->Write() ;
    theFile->Close() ;
 
 }
@@ -356,9 +356,9 @@ bool DPAnalysis::EventSelection(const edm::Event& iEvent, const edm::EventSetup&
     selectedJets.clear() ;  // if using PFJet
     JetSelection( patjets, selectedPhotons, selectedJets_ ) ; // if pat_Jet use 
     // Is designed to use reco::PFJ 
-//    JetSelectionWithTimingInfo( patjets, recHitsEB, recHitsEE, selectedJets_, selectedPhotons );
-    JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons ) ;
-
+/*        JetSelectionWithTimingInfo( patjets, recHitsEB, recHitsEE, selectedJets_, selectedPhotons );
+          JetSelectionWithTimingInfo( jets, recHitsEB, recHitsEE, selectedJets, selectedPhotons ) ;
+*/
     MatchSuperClusterToJet( iEvent, iSetup, jets, theBarrelSuperClusters, theEndcapSuperClusters, lazyTools, recHitsEB, recHitsEE,  selectedJets, selectedPhotons ) ;
 
    //bool isGammaJets = GammaJetVeto( selectedPhotons, selectedJets ) ;
@@ -1894,21 +1894,21 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
      //fiducial cuts 
    if(ijet->pt() < jetCuts[0] || fabs ( ijet->eta() ) > jetCuts[1] ) continue ;
 
-   float seedBCWtime         = 0 ; 
-   float seedcrystime        = 0 ;
-   float seedcrystimeErr     = 0 ;
-   float seedcrystime1       = 0 ;
-   float seedcrystimeChi2    = 0 ;
-   float seedcrysOOtimeChi2  = 0 ;
-   float seedcrysE           = 0 ; 
-   float BCWavetime          = 0 ;
-   float BCWavetimeErr       = 0 ;
-   float BCtimeChi2          = 0 ;
-   int    NCrys               = 0 ;
-   int    numBC               = 0 ;  
-   int    Nspikes             = 0 ;
-   int    nseedXtal           = 0 ;
-   float fspike               = 0.0 ;
+   float seedBCWtime         = 0.0  ; 
+   float seedcrystime        = 0.0 ;
+   float seedcrystimeErr     = 0.0 ;
+   float seedcrystime1       = 0.0 ;
+   float seedcrystimeChi2    = 0.0 ;
+   float seedcrysOOtimeChi2  = 0.0 ;
+   float seedcrysE           = 0.0 ; 
+   float BCWavetime          = 0.0 ;
+   float BCWavetimeErr       = 0.0 ;
+   float BCtimeChi2          = 0.0 ;
+   int    NCrys              = 0 ;
+   int    numBC              = 0 ;  
+   int    Nspikes            = 0 ;
+   int    nseedXtal          = 0 ;
+   float fspike              = 0.0 ;
  
    float deltaR              =  0.0 ; 
    float SBClusEnergy        =  0.0 ; 
@@ -1931,8 +1931,8 @@ for(reco::PFJetCollection::const_iterator  ijet = jets->begin() ; ijet != jets->
    float xtimeErr  = 0.0 ;
    float  ndof     = 0.0 ;
    float  chi2_bc  = 0.0 ;
-   int nBCEB          = 0 ;
-   int     njEB     = 0 ;
+   int nBCEB       = 0 ;
+   int     njEB    = 0 ;
    double  et  = (sclus->position().eta() == 0 )? 0 : sclus->rawEnergy()/TMath::CosH(sclus->position().eta() ) ;
    double eta  = sclus->position().eta() ;
    double  phi  = sclus->position().phi() ;
